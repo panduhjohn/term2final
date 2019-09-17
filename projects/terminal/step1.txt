@@ -1,0 +1,8 @@
+total 600
+  8 filea.txt
+  8 fileb.txt
+ 24 filec.txt
+552 img
+  0 output
+  0 test.js
+  8 test4.html

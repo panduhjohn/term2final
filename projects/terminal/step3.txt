@@ -1,0 +1,5 @@
+     1	total 600
+     2	  8 filea.txt
+     3	  8 fileb.txt
+     4	 24 filec.txt
+     5	552 img

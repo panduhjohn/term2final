@@ -1,0 +1,11 @@
+Script started on Mon Sep 16 14:19:57 2019
+[?1034hbash-3.2$ ls
+filea.txt	filec.txt	img		step1.txt	step3.txt	test4.html
+fileb.txt	filed.txt	output		step2.txt	test.js		typescript
+bash-3.2$ date
+Mon Sep 16 14:20:04 EDT 2019
+bash-3.2$ touch new.txt
+bash-3.2$ exit
+exit
+
+Script done on Mon Sep 16 14:20:20 2019
