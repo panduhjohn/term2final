@@ -25,7 +25,7 @@ const sweeterArray = sweetArray.map(sweetItem => {
     return sweetItem * 2
 })
 
-console.log(sweeterArray) // [4, 6, 8, 10, 70]
+// console.log(sweeterArray) // [4, 6, 8, 10, 70]
 // const sweeterArray = sweetArray.map(s => s * 2)
 
 // 2
@@ -38,7 +38,7 @@ const sweetArray2 = [2, 3, 4, 5, 35];
 // call the function we made. more readable
 const sweeterArray2 = sweetArray2.map(makeSweeter);
 
-console.log(sweeterArray2); // [4, 6, 8, 10, 70]
+// console.log(sweeterArray2); // [4, 6, 8, 10, 70]
 
 // 3
 // Converting a String to an Array
@@ -49,7 +49,7 @@ const newName = map.call(name, eachLetter => {
     return `${eachLetter}a`
 })
 
-console.log(newName) // ["Ca", "ha", "ua", "la", "oa", "oa"]
+// console.log(newName) // ["Ca", "ha", "ua", "la", "oa", "oa"]
 
 // 4
 // What you have
@@ -67,3 +67,28 @@ var officers = [
 
 // 1. Write a function that returns a string with each of its words reversed but in the original order, without using a loop.
 // solution("The quick brown fox") == "ehT kciuq nworb xof";
+function solution_2(str) {
+    let words = str.split(' ')
+    console.log(`words: `, words);
+
+    let reversed = words.map(function(word) {
+        console.log(`wordBefore: `, word);
+        
+        word = word.split('').reverse().join('')
+
+        console.log(`wordAfter: `, word);
+        console.log('================');
+
+        return word
+    })
+
+    return reversed.join(' ')
+}
+
+console.log(solution_2("The quick brown fox"));
+
+function solution_3(str) {
+    return str.split(' ').map(word => word.split('').reverse().join('')).join(' ')
+}
+
+console.log(solution_3("The quick brown fox"));
