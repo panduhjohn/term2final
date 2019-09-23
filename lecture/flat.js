@@ -8,10 +8,17 @@
   */
 
 // 1
-let arr = [[1, 2], [3, 4], [5, 6]]
+[[1, 2], [3, 4], [5, 6]].flat(); 
+// [1, 2, 3, 4, 5, 6]
 
-console.log(`arr: `, arr.flat());
+// 2
+// By default, flat() only flattens one level deep:
 
-console.log([[[1, 2]], [[3, 4]], [[5, 6]]].flat())
+[[[1, 2]], [[3, 4]], [[5, 6]]].flat(); 
+// [ [ 1, 2 ], [ 3, 4 ], [ 5, 6 ] ]
 
-console.log([[[1, 2]], [[3, 4]], [[5, 6]]].flat(2))
+// 3
+// However, flat() takes a depth argument that specifies how many levels down you want to flatten.
+
+[[[1, 2]], [[3, 4]], [[5, 6]]].flat(2); 
+// [1, 2, 3, 4, 5, 6]
