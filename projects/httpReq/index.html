@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <center><h1>HTTP Request</h1></center>
+    <br>
+    <br>
+    <br>
+    <center><div id="result"></div></center>
+
+    <script>
+    setTimeout(() => {
+        let xhttp = new XMLHttpRequest()
+        let url   = `http://api.openweathermap.org/data/2.5/weather?q=brooklyn,us&units=imperial&apiKey=8d0633456d28a72b3fcfb1da4cfa3799`
+        
+        xhttp.open('GET', url, true)
+        xhttp.send()
+
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(JSON.parse(this.responseText))
+
+                document.getElementById('result').innerText = 'Done! Check your console!'
+            } else if (this.status == 404) {
+                console.log('Not Found!')
+            }
+        }
+    }, 3000);
+    </script>
+</body>
+</html>
