@@ -7,17 +7,19 @@ const session = require('express-session')
 const cookieParse = require('cookie-parser')
 // https://www.npmjs.com/package/express-validator
 const expressValidator = require('express-validator')
+const authChecker = require('./utils/authChecker')
+const isLoggedIn  = require('./utils/isLoggedIn') 
 
 let app = express()
 
 // connected views folder
-app.set('views', path.join(__dirname, 'views'))
+// app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 // connected static folder
 app.use(express.static(path.join(__dirname, 'public')))
 // enable req.body using html form
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 
 app.use(logger('dev'))
 
@@ -60,6 +62,7 @@ app.get('/', (req, res, next) => {
     console.log(req.session.cookie)
 
     if (Object.keys(req.query).length != 0) {
+        // pass to next route
         next()
 
         return
@@ -74,22 +77,15 @@ app.get('/', (req, res, next) => {
     res.send(req.query)
 })
 
-app.post('/', (req, res) => {
-    res.send(req.body)
-})
-
-app.get('/users/register', (req, res) => {
+app.get('/users/register', isLoggedIn, (req, res) => {
+    console.log(`81: `);
+    
     res.render('register', { error_msg : false })
 })
 
-app.post('/users/register', (req, res) => {
-    req.checkBody('username', 'Between 3 and 15 characters').isLength({ min: 3, max: 15 })
-    req.checkBody('username', 'Only use A-Z').notEmpty().blacklist(/<>\//);
-    req.checkBody('email', 'Enter a valid email address').isEmail()
-    req.checkBody('password2', 'Password is not matching').notEmpty().equals(req.body.password)
-
+app.post('/users/register', authChecker ,(req, res) => {
     let errors = req.validationErrors()
-
+    
     if (errors) {
         res.render('register', { error_msg: true, errors: errors })
     } else {
@@ -99,8 +95,36 @@ app.post('/users/register', (req, res) => {
 
         req.session.user = user
 
+        console.log(`req.session.user: `, req.session.user);
+        
         res.redirect('/show-me-my-page')
     }
+})
+
+// route for users/login
+app.get('/users/login', isLoggedIn , (req, res) => {
+    res.render('login', { success_msg: false, error_msg: false })
+})
+
+// write route to handle request from login form
+app.post('/users/login', (req, res) => {
+    req.checkBody('password').equals(user.password).withMessage('Password does not match')
+
+    let errors = req.validationErrors()
+
+    if (errors) {
+        res.render('login', { error_msg: true, errors: errors, success_msg: false })
+    } else {
+        req.session.user = req.body.email
+        
+        res.render('login', { error_msg: false, success_msg: 'Success! You are logged in!'})
+    }
+})
+
+app.get('/users/logout', (req, res) => {
+    req.session.destroy()
+
+    res.redirect('/show-me-my-page')
 })
 
 app.get('/show-me-my-page', (req, res) => {
