@@ -85,6 +85,8 @@ app.get('/users/register', isLoggedIn, (req, res) => {
 
 app.post('/users/register', authChecker ,(req, res) => {
     let errors = req.validationErrors()
+
+    console.log(errors)
     
     if (errors) {
         res.render('register', { error_msg: true, errors: errors })
@@ -143,6 +145,6 @@ app.get('*', (req, res) => {
     res.send('got req to *')
 })
 
-app.listen(3000, () => {
+app.listen(3001, () => {
     console.log('Server is running on port 3000')
 })
