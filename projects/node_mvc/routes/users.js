@@ -88,6 +88,20 @@ router.put('/updateuserbyid/:id', (req, res) => {
     })
 })
 
-// localhost:3000/users/updateuserbyid/5d9caab468ca780b82c5a298
+router.delete('/deleteuserbyid/:id', (req, res) => {
+    User.findByIdAndDelete(req.params.id, (err, deletedUser) => {
+        if (err) {
+            res.status(400).json({
+                confirmation: 'failure',
+                message: err
+            })
+        } else {
+            res.json({
+                confirmation: 'success',
+                payload: deletedUser
+            })
+        }
+    })
+})
 
 module.exports = router;
