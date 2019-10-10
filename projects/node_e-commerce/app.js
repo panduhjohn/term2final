@@ -1,15 +1,24 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
+const path         = require('path');
+const flash        = require('connect-flash')
+const logger       = require('morgan');
+const express      = require('express');
+const session      = require('express-session')
+const mongoose     = require('mongoose')
+const passport     = require('passport')
+const createError  = require('http-errors');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const mongoose = require('mongoose')
+const expressValidator = require('express-validator');
+
+let MongoStore = require('connect-mongo')(session)
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users/users');
 
-mongoose.connect('mongodb://localhost/05_19_ecommerce', 
-                { useNewUrlParser: true, useUnifiedTopology: true })
+require('dotenv').config()
+
+mongoose.connect(process.env.MONGODB_URI, 
+                { useNewUrlParser: true, useUnifiedTopology: true,
+                useCreateIndex: true })
         .then(   () => console.log('MongoDB Connected'))
         .catch( err => console.log(`MongoDB Error: ${err}`))
 
@@ -20,10 +29,49 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use(express.json());
+app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: process.env.SESSION_SECRET,
+    store: new MongoStore({
+        url: process.env.MONGODB_URI,
+        autoReconnect: true
+    }),
+    cookie: {
+        secure: false,
+        maxAge: 365 * 24 * 60 * 60 * 1000
+    }
+}))
+
+app.use(flash())
+
+app.use(passport.initialize())
+app.use(passport.session())
+require('./lib/passport/passport.js')(passport)
+
+
+app.use(expressValidator({
+    errorFormatter: (param, message, value) => {
+        let namespace = param.split('.')
+        let root      = namespace.shift()
+        let formParam = root
+
+        while (namespace.length) {
+            formParam += '[' + namespace.shift() + ']'
+        }
+
+        return {
+            param:   formParam,
+            message: message,
+            value:   value
+        }
+    }
+}))
 
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
@@ -37,7 +85,9 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error   = req.app.get('env') === 'development' ? err : {};
+
+  // TODO: add flash
 
   // render the error page
   res.status(err.status || 500);
