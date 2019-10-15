@@ -30,8 +30,7 @@ module.exports = (passport) => {
     })
 
     passport.deserializeUser((id, done) => {
-        // Passport fix
-        User.findOne({ _id: id }, (error, user) => {
+        User.findById(id , (error, user) => {
             done(error, user)
         })
     })
@@ -46,7 +45,7 @@ module.exports = (passport) => {
                         if (error) return done(error, null)
 
                         if (!user) return done(null, false, req.flash('loginMessage', 'User does not exist!'))
-
+                        
                         bcrypt.compare(password, user.password)
                                 .then(result => {
                                     if (!result) {

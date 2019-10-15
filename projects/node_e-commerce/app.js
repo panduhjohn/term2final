@@ -73,6 +73,17 @@ app.use(expressValidator({
     }
 }))
 
+app.use((req, res, next) => {
+    res.locals.user = req.user
+
+    res.locals.errors        = req.flash('errors')
+    res.locals.success       = req.flash('success')
+    res.locals.loginMessage  = req.flash('loginMessage')
+    res.locals.errorValidate = req.flash('errorValidate')
+    
+    next()
+})
+
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 
@@ -83,15 +94,15 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error   = req.app.get('env') === 'development' ? err : {};
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error   = req.app.get('env') === 'development' ? err : {};
 
-  // TODO: add flash
+    // TODO: add flash
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 module.exports = app;

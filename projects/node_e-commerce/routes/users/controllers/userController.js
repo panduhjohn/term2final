@@ -4,10 +4,8 @@ const passport = require('passport')
 
 module.exports = {
     signup: (req, res, next) => {
-        let errorValidate = req.validationErrors()
-
-        if (errorValidate) {
-            res.render('auth/signup', { errors: [], error_msg: true, errorValidate: errorValidate })
+        if (req.validationErrors()) {
+            res.render('auth/signup')
 
             return
         }
