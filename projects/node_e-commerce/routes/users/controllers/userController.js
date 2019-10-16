@@ -1,6 +1,7 @@
-const User   = require('../models/User')
-const bcrypt = require('bcryptjs')
-const passport = require('passport')
+const User     = require('../models/User')
+const bcrypt   = require('bcryptjs')
+const hasher   = require('../utils/hasher')
+const gravatar = require('../utils/gravatar')
 
 module.exports = {
     signup: (req, res, next) => {
@@ -21,14 +22,11 @@ module.exports = {
                     const newUser = new User
                     
                     newUser.email        = req.body.email
-                    newUser.password     = req.body.password
                     newUser.profile.name = req.body.name
-
-                    bcrypt.genSalt(10, (err, salt) => {
-                        bcrypt.hash(newUser.password, salt, (err, hash) => {
-                            if (err) {
-                                reject(err)
-                            } else {
+                    newUser.profile.picture = gravatar(newUser.email)
+                    
+                    hasher.create(req.body.password)
+                            .then( hash => {
                                 newUser.password = hash
 
                                 newUser
@@ -48,15 +46,17 @@ module.exports = {
                                     .catch(err => {
                                         throw err
                                     })
-                            }
-                        })
-                    })
+                            })
+                            .catch( err => {
+                                throw err
+                            })
                 }
             } )
             .catch(err => {
                 throw err
             })
     },
+    // We do not use it. Instead we use passport.authenticate().
     signin: (params) => {
         return new Promise((resolve, reject) => {
             User.findOne({ email: params.email })
@@ -85,6 +85,34 @@ module.exports = {
                     }
                 })
                 .catch(err => reject(err))
+        })
+    },
+    updateProfile: (params, id) => {
+        return new Promise((resolve, reject) => {
+            User.findById(id)
+                .then( user => {
+                    if (params.name != '')    user.profile.name = params.name 
+                    if (params.address != '') user.address      = params.address 
+                    if (params.email != '')   user.email        = params.email 
+
+                    if (params.password != '') {
+                        hasher.create(params.password)
+                                .then(hash => {
+                                    user.password = hash
+                                })
+                                .catch(err => {
+                                    reject(err)
+                                })
+                    }
+
+                    user.save()
+                        .then(user => {
+                            resolve(user)
+                        })
+                        .catch(err => {
+                            reject(err)
+                        })
+                })
         })
     }
 }
