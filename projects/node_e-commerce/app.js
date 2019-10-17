@@ -17,6 +17,8 @@ const usersRouter    = require('./routes/users/users');
 const adminRouter    = require('./routes/admin/admin');
 const productsRouter = require('./routes/products/products');
 
+const Category = require('./routes/products/models/Category')
+
 require('dotenv').config()
 
 mongoose.connect(process.env.MONGODB_URI, 
@@ -86,6 +88,18 @@ app.use((req, res, next) => {
     res.locals.errorValidate = req.flash('errorValidate')
     
     next()
+})
+
+app.use((req, res, next) => {
+    Category.find({})
+            .then(categories => {
+                console.log(`res.locals.categories: `);
+                
+                res.locals.categories = categories
+
+                next()
+            })
+            .catch(error => next(error))
 })
 
 app.use('/', indexRouter);
