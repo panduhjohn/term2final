@@ -1,5 +1,7 @@
 const Product = require('../models/Product')
 
+const paginate = require('../utils/pagination')
+
 module.exports = {
     getAllProducts: (params) => {
         return new Promise((resolve, reject) => {
@@ -49,5 +51,9 @@ module.exports = {
                         reject(errors)
                     })
         })
+    },
+    getPageIfUserLoggedIn: (req, res, next) => {
+        if (req.user) paginate(req, res, next)
+        else res.render('index')
     }
 }
