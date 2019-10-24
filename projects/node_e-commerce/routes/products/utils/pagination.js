@@ -5,7 +5,7 @@ const paginate = (req, res) => {
     let page    = req.params.page
 
     Product
-        .find()
+        .find({})
         .skip(perPage * (page - 1))
         .limit(perPage)
         .populate('category')
@@ -13,15 +13,15 @@ const paginate = (req, res) => {
         .then(products => products)
         .then(products => {
             Product
-                .count()
+                .countDocuments()
                 .exec()
                 .then(count => {
                     res.render('products/product-main', {
                         products: products,
                         pages: Math.ceil(count / perPage),
-                        current: page,
-                        nextPage: page + 1,
-                        previousPage: page - 1
+                        current: Number(page),
+                        nextPage: Number(page) + 1,
+                        previousPage: Number(page) - 1
                     })
                 })
                 .catch(err => {
