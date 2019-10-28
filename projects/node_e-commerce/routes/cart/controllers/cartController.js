@@ -57,5 +57,34 @@ module.exports = {
 
                 res.status(errors.status).json(errors)
             })
+    },
+    removeProduct: (req, res) => {
+        Cart.findOne({ owner: req.user._id })
+            .then(cart => {
+                cart.items.pull(req.body.item)
+
+                cart.total = (cart.total - parseFloat(req.body.price).toFixed(2))
+
+                cart.save()
+                    .then(cart => {
+                        req.flash('success', 'Successfully removed!')
+
+                        res.redirect('back')
+                    })
+                    .catch(err => {
+                        let errors     = {}
+                        errors.status  = 500
+                        errors.message = err
+        
+                        res.status(errors.status).json(errors)
+                    })
+            })
+            .catch(err => {
+                let errors     = {}
+                errors.status  = 500
+                errors.message = err
+
+                res.status(errors.status).json(errors)
+            })
     }
 }
