@@ -1,8 +1,10 @@
+require('dotenv').config()
+
 const express = require('express')
 const router  = express.Router()
 
 const async  = require('async')
-const stripe = require('stripe')('sk_test_5zPUKi7gHghPzCEhWfDd5fQl00XivGJYfX')
+const stripe = require('stripe')(process.env.STRIPE_SK)
 
 const cartController = require('./controllers/cartController')
 
