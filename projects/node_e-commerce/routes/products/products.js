@@ -43,6 +43,8 @@ router.get('/', (req, res) => {
 
 router.get('/search', productController.searchProductByQuery)
 
+router.post('/instant-search', productController.instantSearch)
+
 router.get('/getproductsbycategoryid/:id', (req, res) => {
     productController.getProductsByCategoryID(req.params.id)
     .then(products => {
@@ -55,7 +57,7 @@ router.get('/getproductsbycategoryid/:id', (req, res) => {
 
 router.get('/:id', (req, res) => {
     productController.getProductByID(req.params.id)
-        .then(product => {
+        .then(product => {  
             res.render('products/product', { product: product })
         })
         .catch(err => {

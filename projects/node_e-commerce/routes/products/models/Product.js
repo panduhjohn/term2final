@@ -10,12 +10,12 @@ const ProductSchema = new mongoose.Schema({
     },
     name:  { type: String, es_type: 'text', default: '' },
     price: { type: Number, es_type: 'long', default: 0  },
-    image: { type: String, es_type: 'text', default: '' },
+    image: { type: String, es_type: 'text', default: '' }
 })
 
 ProductSchema.plugin(mongoosastic, {
     hosts: [
-        'https://umtupmo5du:6iuuqcn43a@apricot-440144920.us-east-1.bonsaisearch.net:443'
+        'localhost:9200'
     ],
     populate: [
         {
