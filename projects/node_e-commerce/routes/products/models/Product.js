@@ -10,7 +10,7 @@ const ProductSchema = new mongoose.Schema({
     },
     name:  { type: String, es_type: 'text', default: '' },
     price: { type: Number, es_type: 'long', default: 0  },
-    image: { type: String, es_type: 'text', default: '' }
+    image: { type: String, es_type: 'text', default: '' }    
 })
 
 ProductSchema.plugin(mongoosastic, {

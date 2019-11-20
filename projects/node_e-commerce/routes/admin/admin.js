@@ -31,4 +31,8 @@ router.get('/get-all-categories', categoryController.getAllCategories)
 
 router.get('/create-fake-product/:categoryName/:categoryID', createProductController.createProductByCategoryID)
 
+router.get('/removeproductbyID/:id', (req, res) => {
+    res.send(req.params.id)
+})
+
 module.exports = router
