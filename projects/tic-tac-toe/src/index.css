@@ -35,3 +35,7 @@ body {
 .square:focus {
     outline: none;
 }
+
+.step:focus {
+    outline: none;
+}
