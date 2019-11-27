@@ -3,6 +3,8 @@ const router = express.Router()
 
 const userController = require('./controllers/userController')
 
+// get '/'
+
 router.post('/signupandlogin', (req, res) => {
     userController.signupAndLogin(req.body)
         .then(user => {

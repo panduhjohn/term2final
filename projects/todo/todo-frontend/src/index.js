@@ -3,7 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Nav from './components/Nav/Nav'
 import TodoList from './components/TodoList/TodoList'
-import { apiHandleAddNewTodoList } from './api/api'
+import { 
+        apiHandleAddNewTodoList,
+        apiHandleGetAllTodos 
+    } from './api/api'
 
 class App extends Component {
     state = {
@@ -11,8 +14,8 @@ class App extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.isAuth === false && this.state.isAuth === true) {
-            // TODO: get all todos
+        if (this.state.isAuth === true) {
+            this.appHandleGetAllTodos()
         } 
     }
 
@@ -36,6 +39,12 @@ class App extends Component {
             .catch(err => {
                 console.log('err: ', err)
             })
+    }
+
+    appHandleGetAllTodos = () => {
+        apiHandleGetAllTodos()
+            .then(todos => console.log('todos: ', todos))
+            .catch(error => console.log('error: ', error))
     }
 
     render() {

@@ -61,6 +61,17 @@ export const apiHandleAddNewTodoList = (newTask) => {
     })
 }
 
+export const apiHandleGetAllTodos = () => {
+    return new Promise((resolve, reject) => {
+        const token = localStorage.getItem('jwtToken')
+        const decoded = jwt_decode(token)
+
+        Axios.get(`/todo?id=${ decoded.id }`)
+            .then(result => resolve(result))
+            .catch(error => reject(error))
+    })
+}
+
 const axiosConfig = {
     headers: {
         'Content-Type': 'application/json;charset=UTF-8',
