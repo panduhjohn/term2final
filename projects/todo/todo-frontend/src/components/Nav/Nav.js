@@ -78,6 +78,7 @@ class Nav extends Component {
 
     render() {
         return (
+            <>
             <nav className='navbar navbar-light bg-light'>
                 <a className='navbar-brand' href='\'>CODE IMMERSIVES</a>
                 { this.state.isAuth ? (
@@ -115,6 +116,13 @@ class Nav extends Component {
                     </form>
                 ) }
             </nav>
+            <span
+                style={{ padding: '0px' }}
+                className={ this.state.errorToggle ? 'alert alert-danger' : '' }
+            >
+                { this.state.errorToggle ? this.state.errorMessage : '' }
+            </span>
+            </>
         )
     }
 }

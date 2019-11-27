@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Nav from './components/Nav/Nav'
 import TodoList from './components/TodoList/TodoList'
+import { apiHandleAddNewTodoList } from './api/api'
 
 class App extends Component {
     state = {
@@ -11,7 +12,7 @@ class App extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.isAuth === false && this.state.isAuth === true) {
-            
+            // TODO: get all todos
         } 
     }
 
@@ -25,6 +26,16 @@ class App extends Component {
         this.setState({
             isAuth: false
         })
+    }
+
+    appHandleAddNewTodoList = (newTodoFromTodoList) => {
+        apiHandleAddNewTodoList(newTodoFromTodoList)
+            .then(createdNewTodo => {
+                console.log('createdNewTodo: ', createdNewTodo)
+            })
+            .catch(err => {
+                console.log('err: ', err)
+            })
     }
 
     render() {
@@ -49,7 +60,9 @@ class App extends Component {
                             </li>
                         </ul>
                     </div>
-                    <TodoList />
+                    <TodoList 
+                        appHandleAddNewTodoList={ this.appHandleAddNewTodoList }
+                    />
                     </>
                 ) : (
                     <h1>You need to Login to use this App</h1>

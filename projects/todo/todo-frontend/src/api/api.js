@@ -30,7 +30,7 @@ export const apiAuth = () => {
 export const apiHandleSignUpAndLogIn = (userInfo) => {
     return new Promise((resolve, reject) => {
         Axios.post('/users/signupandlogin', userInfo, axiosConfig)
-            .then(result => {
+            .then(result => { 
                 const { token } = result.data
 
                 localStorage.setItem('jwtToken', token)
@@ -42,6 +42,22 @@ export const apiHandleSignUpAndLogIn = (userInfo) => {
                 resolve(decoded)
             })
             .catch(error => reject(error.response.data.message))
+    })
+}
+
+export const apiHandleAddNewTodoList = (newTask) => {
+    return new Promise((resolve, reject) => {
+        const token = localStorage.getItem('jwtToken')
+        const decoded = jwt_decode(token)
+
+        const newObj = {
+            todo: newTask,
+            id: decoded.id
+        }
+
+        Axios.post('/todo/createtodo', newObj, axiosConfig)
+            .then(newTodo => resolve(newTodo.data))
+            .catch(err => reject(err))
     })
 }
 

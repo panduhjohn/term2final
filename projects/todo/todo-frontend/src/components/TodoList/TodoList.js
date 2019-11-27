@@ -7,8 +7,14 @@ export default class TodoList extends Component {
         newTodo: ''
     }
 
-    handleNewTodoSubmit = () => {
-        console.log('New Todo Submit')
+    handleNewTodoSubmit = (event) => {
+        event.preventDefault()
+
+        this.props.appHandleAddNewTodoList(this.state)
+
+        this.setState({
+            newTodo: ''
+        })
     }
 
     handleOnChange = (event) => {
