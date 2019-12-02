@@ -23,6 +23,22 @@ export default class TodoList extends Component {
         })
     }
 
+    showTodoList() {
+        console.log(`this.props.todoList: `, this.props.todoList);
+
+        return this.props.todoList.map((item) => {
+            return (
+                <Todo
+                    key={ item._id } 
+                    id={ item._id }
+                    item={ item.todo }
+                    completed={ item.completed }
+                    todoHandleNewEditTodoByID={ this.props.appHandleNewEditTodoByID }
+                />
+            )
+        })
+    }
+
     render() {
         return (
             <>
@@ -36,10 +52,18 @@ export default class TodoList extends Component {
                 />
                 <button>Submit</button>
             </form>
-            <ul>
-                <Todo />
+            <ul style={ styles.listStyle }>
+                {
+                    this.props.todoList ? this.showTodoList() : null
+                }
             </ul>
             </>
         )
+    }
+}
+
+const styles = {
+    listStyle: {
+        listStyleType: 'none'
     }
 }

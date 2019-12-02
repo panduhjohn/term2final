@@ -72,6 +72,10 @@ export const apiHandleGetAllTodos = () => {
     })
 }
 
+export const apiHandleNewEditTodoByID = (id, newTodo) => {
+    console.log(`[api.js] apiHandleNewEditTodoByID: id=${id}, newTodo=${newTodo}`)
+}
+
 const axiosConfig = {
     headers: {
         'Content-Type': 'application/json;charset=UTF-8',

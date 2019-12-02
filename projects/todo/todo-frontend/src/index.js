@@ -5,16 +5,21 @@ import Nav from './components/Nav/Nav'
 import TodoList from './components/TodoList/TodoList'
 import { 
         apiHandleAddNewTodoList,
-        apiHandleGetAllTodos 
+        apiHandleGetAllTodos,
+        apiHandleNewEditTodoByID 
     } from './api/api'
 
 class App extends Component {
     state = {
+        todoLibrary: {},
+        selected: 'all',
         isAuth: false
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.isAuth === true) {
+        console.log(`[index.js] componentDidUpdate: `);
+        
+        if (this.state.isAuth === true && prevState.isAuth === false) {
             this.appHandleGetAllTodos()
         } 
     }
@@ -35,6 +40,16 @@ class App extends Component {
         apiHandleAddNewTodoList(newTodoFromTodoList)
             .then(createdNewTodo => {
                 console.log('createdNewTodo: ', createdNewTodo)
+
+                this.setState(({ todoLibrary }) => ({
+                    todoLibrary: {
+                        ...todoLibrary,
+                        ['all']: [...todoLibrary.all, createdNewTodo]
+                    }
+                }), () => {
+                    // getAllCompleted
+                    // getAllInCompleted
+                })
             })
             .catch(err => {
                 console.log('err: ', err)
@@ -43,8 +58,19 @@ class App extends Component {
 
     appHandleGetAllTodos = () => {
         apiHandleGetAllTodos()
-            .then(todos => console.log('todos: ', todos))
+            .then(allTodos => {
+                this.setState(({ todoLibrary }) => ({
+                    todoLibrary: {
+                        ...todoLibrary,
+                        ['all']: allTodos.data.todos
+                    }
+                }))
+            })
             .catch(error => console.log('error: ', error))
+    }
+
+    appHandleNewEditTodoByID = (id, newTodo) => {
+        apiHandleNewEditTodoByID(id, newTodo)
     }
 
     render() {
@@ -71,6 +97,8 @@ class App extends Component {
                     </div>
                     <TodoList 
                         appHandleAddNewTodoList={ this.appHandleAddNewTodoList }
+                        todoList={ this.state.todoLibrary['all'] }
+                        appHandleNewEditTodoByID={ this.appHandleNewEditTodoByID }
                     />
                     </>
                 ) : (

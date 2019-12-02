@@ -4,9 +4,9 @@ const passport = require('passport')
 
 const todoController = require('./controllers/todoController')
 
-router.get('/', (req, res) => {
+router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
     todoController.getAllTodos(req.query.id)
-        .then(todos => res.json(todos))
+        .then(todos  => res.json(todos))
         .catch(error => res.json(error))
 })
 
