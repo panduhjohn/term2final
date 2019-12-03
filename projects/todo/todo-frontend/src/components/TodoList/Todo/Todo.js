@@ -26,7 +26,8 @@ export default class Todo extends Component {
         const {
             id,
             item,
-            todoHandleNewEditTodoByID
+            todoHandleNewEditTodoByID,
+            todoHandleDeleteByID
         } = this.props
 
         return (
@@ -65,6 +66,12 @@ export default class Todo extends Component {
                         </>
                     )
                 }
+                <button 
+                    className={`buttonClass btn btn-danger ${this.state.isToggle ? 'makeButtonHidden' : ''}`}
+                    onClick={ () => todoHandleDeleteByID(id) }
+                >
+                    Delete
+                </button>
             </li>
         )
     }

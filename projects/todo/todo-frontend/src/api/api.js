@@ -73,7 +73,27 @@ export const apiHandleGetAllTodos = () => {
 }
 
 export const apiHandleNewEditTodoByID = (id, newTodo) => {
-    console.log(`[api.js] apiHandleNewEditTodoByID: id=${id}, newTodo=${newTodo}`)
+    return new Promise((resolve, reject) => {
+        const newObj = {
+            id,
+            newTodo 
+        }
+
+        Axios.put('/todo/updatetodobyid', newObj)
+            .then(result => resolve(result.data))
+            .catch(error => reject(error))
+    })
+}
+
+export const apiHandleDeleteByID = (todoID) => {
+    return new Promise((resolve, reject) => {
+        const token   = localStorage.getItem('jwtToken')
+        const decoded = jwt_decode(token)
+
+        Axios.delete(`/todo/deletetodobyid/${ decoded.id }/${ todoID }`)
+            .then(result => resolve(result.data.todos))
+            .catch(error => reject(error))
+    })
 }
 
 const axiosConfig = {

@@ -6,7 +6,8 @@ import TodoList from './components/TodoList/TodoList'
 import { 
         apiHandleAddNewTodoList,
         apiHandleGetAllTodos,
-        apiHandleNewEditTodoByID 
+        apiHandleNewEditTodoByID,
+        apiHandleDeleteByID 
     } from './api/api'
 
 class App extends Component {
@@ -17,8 +18,6 @@ class App extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log(`[index.js] componentDidUpdate: `);
-        
         if (this.state.isAuth === true && prevState.isAuth === false) {
             this.appHandleGetAllTodos()
         } 
@@ -71,6 +70,34 @@ class App extends Component {
 
     appHandleNewEditTodoByID = (id, newTodo) => {
         apiHandleNewEditTodoByID(id, newTodo)
+            .then(updatedTodo => {
+                const newComplitedList = this.state.todoLibrary['all'].map(item => {
+                    if(item._id === id) item.todo = updatedTodo.todo
+
+                    return item
+                })
+
+                this.setState(({ todoLibrary }) => ({
+                    todoLibrary: {
+                        ...todoLibrary,
+                        ['all']: newComplitedList
+                    }
+                }))
+            })
+            .catch(error => console.log('[index.js] error', error))
+    }
+
+    appHandleDeleteByID = (id) => {
+        apiHandleDeleteByID(id)
+            .then(filteredTodos => {
+                this.setState(({ todoLibrary }) => ({
+                    todoLibrary:{
+                        ...todoLibrary,
+                        ['all']: filteredTodos
+                    }
+                }))
+            })
+            .catch(error => console.log(error))
     }
 
     render() {
@@ -99,6 +126,7 @@ class App extends Component {
                         appHandleAddNewTodoList={ this.appHandleAddNewTodoList }
                         todoList={ this.state.todoLibrary['all'] }
                         appHandleNewEditTodoByID={ this.appHandleNewEditTodoByID }
+                        appHandleDeleteByID={ this.appHandleDeleteByID }
                     />
                     </>
                 ) : (

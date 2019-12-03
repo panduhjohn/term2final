@@ -34,6 +34,7 @@ export default class TodoList extends Component {
                     item={ item.todo }
                     completed={ item.completed }
                     todoHandleNewEditTodoByID={ this.props.appHandleNewEditTodoByID }
+                    todoHandleDeleteByID={ this.props.appHandleDeleteByID }
                 />
             )
         })
