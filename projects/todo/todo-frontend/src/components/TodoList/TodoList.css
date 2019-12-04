@@ -4,5 +4,9 @@
 }
 
 .makeButtonHidden {
-    visibility: hidden;
+    display: none;
+}
+
+.completedTodoLineThrough {
+    text-decoration: line-through;
 }

@@ -26,12 +26,17 @@ export default class Todo extends Component {
         const {
             id,
             item,
+            completed,
             todoHandleNewEditTodoByID,
-            todoHandleDeleteByID
+            todoHandleDeleteByID,
+            todoHandleCompleteByID
         } = this.props
 
         return (
-            <li>
+            <li 
+                key={ id } 
+                className={ `${ completed ? 'completedTodoLineThrough' : '' }` }
+            >
                 {
                     this.state.isToggle ? (
                         <>
@@ -62,6 +67,14 @@ export default class Todo extends Component {
                                 onClick={ this.handleEditToggle }
                             >
                                 Edit
+                            </button>
+                            <button 
+                                className={`buttonClass btn btn-danger ${ completed ? 'makeButtonHidden' : '' }`}
+                                onClick={ () => {
+                                    todoHandleCompleteByID(id, !completed)
+                                }}
+                            >
+                                Done
                             </button>
                         </>
                     )

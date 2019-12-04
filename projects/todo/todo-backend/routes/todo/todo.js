@@ -34,4 +34,13 @@ router.delete('/deletetodobyid/:userid/:id', passport.authenticate('jwt', { sess
         .catch(error => res.json(error))
 })
 
+router.put('/completetodobyid/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    const id = req.params.id
+    const completed = req.body.completed
+
+    todoController.completeTodoByID(id, completed)
+        .then(completedTodo => res.json(completedTodo))
+        .catch(error => res.json(error))
+})
+
 module.exports = router

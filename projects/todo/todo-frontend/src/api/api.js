@@ -96,6 +96,18 @@ export const apiHandleDeleteByID = (todoID) => {
     })
 }
 
+export const apiHandleCompletedByID = (id, bool) => {
+    return new Promise((resolve, reject) => {
+        Axios.put(`/todo/completetodobyid/${ id }`, { completed: bool })
+            .then(completedTodo => resolve(completedTodo.data))
+            .catch(error => reject(error))
+    })
+}
+    
+// GET: /todo/findtodobycategory?completed=completion&userid
+    // get completionTodos back
+        // update todoLibrary based on completion
+
 const axiosConfig = {
     headers: {
         'Content-Type': 'application/json;charset=UTF-8',

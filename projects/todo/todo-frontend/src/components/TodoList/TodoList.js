@@ -24,8 +24,6 @@ export default class TodoList extends Component {
     }
 
     showTodoList() {
-        console.log(`this.props.todoList: `, this.props.todoList);
-
         return this.props.todoList.map((item) => {
             return (
                 <Todo
@@ -35,6 +33,7 @@ export default class TodoList extends Component {
                     completed={ item.completed }
                     todoHandleNewEditTodoByID={ this.props.appHandleNewEditTodoByID }
                     todoHandleDeleteByID={ this.props.appHandleDeleteByID }
+                    todoHandleCompleteByID={ this.props.appHandleCompleteById }
                 />
             )
         })

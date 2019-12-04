@@ -66,5 +66,12 @@ module.exports = {
                 })
                 .catch(error => reject(error))
         })
+    },
+    completeTodoByID: (id, completed) => {
+        return new Promise((resolve, reject) => {
+            Todo.findByIdAndUpdate(id, { completed: completed }, { new: true })
+                .then(updatedTodo => resolve(updatedTodo))
+                .catch(error => reject(error))
+        })
     }
 }
