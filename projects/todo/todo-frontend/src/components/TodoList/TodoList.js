@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './TodoList.css'
 import Todo from './Todo/Todo'
+import PropTypes from 'prop-types'
 
 export default class TodoList extends Component {
     state = {
@@ -60,6 +61,16 @@ export default class TodoList extends Component {
             </>
         )
     }
+}
+
+TodoList.propTypes = {
+    todoList: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string,
+            todo: PropTypes.string,
+            completed: PropTypes.bool
+        })
+    )
 }
 
 const styles = {

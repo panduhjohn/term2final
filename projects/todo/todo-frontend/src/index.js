@@ -8,7 +8,8 @@ import {
         apiHandleGetAllTodos,
         apiHandleNewEditTodoByID,
         apiHandleDeleteByID,
-        apiHandleCompletedByID 
+        apiHandleCompletedByID,
+        apiHandleGetTodosByCompletion 
     } from './api/api'
 
 class App extends Component {
@@ -47,8 +48,17 @@ class App extends Component {
                         'all': [...todoLibrary.all, createdNewTodo]
                     }
                 }), () => {
-                    // getAllCompleted
-                    // getAllInCompleted
+                    const newCompleted = this.state.todoLibrary.all.filter(item => item.completed === true ? item : '' )
+
+                    const newIncomplete = this.state.todoLibrary.all.filter(item => item.completed === false ? item : '')
+
+                    this.setState(({ todoLibrary }) => ({
+                        todoLibrary: {
+                            ...todoLibrary,
+                            ['completed']: newCompleted,
+                            ['incomplete']: newIncomplete
+                        }
+                    }))
                 })
             })
             .catch(err => {
@@ -96,7 +106,19 @@ class App extends Component {
                         ...todoLibrary,
                         'all': filteredTodos
                     }
-                }))
+                }), () => {
+                    const newCompleted = this.state.todoLibrary.all.filter(item => item.completed === true ? item : '' )
+
+                    const newIncomplete = this.state.todoLibrary.all.filter(item => item.completed === false ? item : '')
+
+                    this.setState(({ todoLibrary }) => ({
+                        todoLibrary: {
+                            ...todoLibrary,
+                            ['completed']: newCompleted,
+                            ['incomplete']: newIncomplete
+                        }
+                    }))
+                })
             })
             .catch(error => console.log(error))
     }
@@ -121,6 +143,18 @@ class App extends Component {
                             'all': newCompletedList
                         }
                     }
+                }, () => {
+                    const newCompleted = this.state.todoLibrary.all.filter(item => item.completed === true ? item : '' )
+
+                    const newIncomplete = this.state.todoLibrary.all.filter(item => item.completed === false ? item : '')
+
+                    this.setState(({ todoLibrary }) => ({
+                        todoLibrary: {
+                            ...todoLibrary,
+                            ['completed']: newCompleted,
+                            ['incomplete']: newIncomplete
+                        }
+                    }))
                 })
             })
             .catch(error => console.log(error))
@@ -138,7 +172,16 @@ class App extends Component {
         else if (completion === 'completed')  completeBool = true
 
         if (!this.state.todoLibrary[completion] || this.state.todoLibrary[completion].length === 0) {
-            // make api call to get todos with completed = completion
+            apiHandleGetTodosByCompletion(completeBool)
+                .then(results => {
+                    this.setState(({ todoLibrary }) => ({
+                        todoLibrary: {
+                            ...todoLibrary,
+                            [completion]: results
+                        }
+                    }))
+                })
+                .catch(error => console.log(error))
         }
     }
 
@@ -154,19 +197,19 @@ class App extends Component {
                     <div id='category'>
                         <ul>
                             <li onClick={ () => this.appHandleGetTodosByCompletion('all') }>
-                                <a href='/'>All todos</a>
+                                <a href='#'>All todos</a>
                             </li>
                             <li onClick={ () => this.appHandleGetTodosByCompletion('incomplete') }>
-                                <a href='/'>Current todos</a>
+                                <a href='#'>Current todos</a>
                             </li>
                             <li onClick={ () => this.appHandleGetTodosByCompletion('completed') }>
-                                <a href='/'>Done todos</a>
+                                <a href='#'>Done todos</a>
                             </li>
                         </ul>
                     </div>
                     <TodoList 
-                        appHandleAddNewTodoList={ this.appHandleAddNewTodoList }
                         todoList={ this.state.todoLibrary[this.state.selected] }
+                        appHandleAddNewTodoList={ this.appHandleAddNewTodoList }
                         appHandleNewEditTodoByID={ this.appHandleNewEditTodoByID }
                         appHandleDeleteByID={ this.appHandleDeleteByID }
                         appHandleCompleteById={ this.appHandleCompleteById }

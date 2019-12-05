@@ -103,10 +103,17 @@ export const apiHandleCompletedByID = (id, bool) => {
             .catch(error => reject(error))
     })
 }
-    
-// GET: /todo/findtodobycategory?completed=completion&userid
-    // get completionTodos back
-        // update todoLibrary based on completion
+
+export const apiHandleGetTodosByCompletion = (completion) => {
+    return new Promise((resolve, reject) => {
+        const token = localStorage.getItem('jwtToken')
+        const decoded = jwt_decode(token)
+
+        Axios.get(`/todo/findtodobycategory?completed=${ completion }&userid=${ decoded.id }`)
+            .then(completionTodos => resolve(completionTodos.data))
+            .catch(error => reject(error))
+    })
+}
 
 const axiosConfig = {
     headers: {

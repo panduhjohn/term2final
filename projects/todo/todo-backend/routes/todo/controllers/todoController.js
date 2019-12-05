@@ -73,5 +73,14 @@ module.exports = {
                 .then(updatedTodo => resolve(updatedTodo))
                 .catch(error => reject(error))
         })
+    },
+    findTodoByCategory: (completed, userID) => {
+        return new Promise((resolve, reject) => {
+            {
+                Todo.find({ completed: completed, user_id: userID })
+                    .then(found  => resolve(found))
+                    .catch(error => reject(error))
+            }
+        })
     }
 }

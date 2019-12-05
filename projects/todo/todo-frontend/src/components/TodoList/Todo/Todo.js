@@ -48,7 +48,8 @@ export default class Todo extends Component {
                                 onClick={ this.handleEditToggle }
                                 className='buttonClass btn btn-danger'
                             >
-                                Cancel</button>
+                                Cancel
+                            </button>
                             <button
                                 className='buttonClass btn btn-primary'
                                 disabled={ this.state.newEditTodo === this.state.currentTodo ? true : false }
@@ -57,7 +58,9 @@ export default class Todo extends Component {
 
                                     this.handleEditToggle()
                                 }}
-                            >Submit</button>
+                            >
+                                Submit
+                            </button>
                         </>
                     ) : (
                         <>

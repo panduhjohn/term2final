@@ -43,4 +43,13 @@ router.put('/completetodobyid/:id', passport.authenticate('jwt', { session: fals
         .catch(error => res.json(error))
 })
 
+router.get('/findtodobycategory', passport.authenticate('jwt', { session: false }), (req, res) => {
+    const completed = req.query.completed
+    const userID    = req.query.userid
+
+    todoController.findTodoByCategory(completed, userID)
+        .then(result => res.json(result))
+        .catch(error => res.json(error))
+})
+
 module.exports = router
